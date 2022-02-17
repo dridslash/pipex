@@ -6,11 +6,25 @@
 /*   By: mnaqqad <mnaqqad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 16:42:31 by mnaqqad           #+#    #+#             */
-/*   Updated: 2021/12/16 09:43:01 by mnaqqad          ###   ########.fr       */
+/*   Updated: 2022/02/17 12:35:34 by mnaqqad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+int find_path(char **envp)
+{
+	int i =0;
+	while (envp[i])
+	{
+		if(ft_strnstr(envp[i],"PATH=",5))
+		{
+			return (i);
+		}
+		i++;
+	}
+	return (-1);
+}
 
 char	*get_path(char *cmd, char **envp)
 {
@@ -19,7 +33,10 @@ char	*get_path(char *cmd, char **envp)
 	char	*checkp;
 
 	i = 0;
-	env_path = ft_split(envp[6], ':');
+	if(access(cmd,X_OK) == 0)
+		return (cmd);
+	
+	env_path = ft_split(envp[find_path(envp)], ':');
 	env_path[0] = ft_strtrim(env_path[0], "PATH=");
 	while (env_path[i])
 	{
@@ -30,10 +47,11 @@ char	*get_path(char *cmd, char **envp)
 	while (env_path[i])
 	{
 		checkp = ft_strjoin(env_path[i], cmd);
-		if (access(checkp, F_OK) == 0)
+		if (access(checkp, X_OK) == 0)
 			return (checkp);
 		free(checkp);
 		i++;
 	}
 	return (NULL);
 }
+

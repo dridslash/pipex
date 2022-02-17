@@ -14,6 +14,7 @@ SRCS = ft_split.c \
 	fork_for_child_cmdone.c \
 	fork_for_child_cmdtwo.c \
 	get_params.c \
+	ft_strnstr.c
 
 OBJS = ${SRCS:.c=.o}
 

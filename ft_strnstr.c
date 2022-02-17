@@ -1,38 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fork_for_child_cmdone.c                            :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mnaqqad <mnaqqad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/15 12:02:06 by mnaqqad           #+#    #+#             */
-/*   Updated: 2022/02/17 12:37:50 by mnaqqad          ###   ########.fr       */
+/*   Created: 2021/11/03 18:15:54 by mnaqqad           #+#    #+#             */
+/*   Updated: 2022/02/17 12:32:01 by mnaqqad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	fork_for_child_cmdone(int *fd, char **argv, char **envp, int pid1)
+char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
-	int		fp;
-	char	**ag;
+	size_t	i;
+	size_t	j;
+	size_t	k;
 
-	if (pid1 == 0)
+	i = 0;
+	j = 0;
+	if (little[0] == '\0')
+		return ((char *)big);
+	while (big[i] != '\0')
 	{
-		fp = open(argv[1], O_RDONLY);
-		if (fp < 0)
-			exit(1);
-		dup2(fp, 0);
-		dup2(fd[1], 1);
-		close(fp);
-		close(fd[1]);
-		close(fd[0]);
-		ag = get_params(2, argv);
-		if ((execve(get_path(ag[0], envp), ag, NULL) == -1))
+		j = 0;
+		if (big[i] == little[0])
 		{
-			perror("error");
-			exit(1);
+			k = i;
+			while (big[k] == little[j] && k < len)
+			{
+				if (little[j + 1] == '\0')
+					return ((char *)&big[i]);
+				k++;
+				j++;
+			}
 		}
-		exit(0);
+		i++;
 	}
+	return (0);
 }
